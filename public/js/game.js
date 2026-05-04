@@ -1,14 +1,7 @@
-
-// Snake Game - index.js
-const express = require('express');
-const http = require('http');
-const app = express();
-
-app.use(express.static('public'));
-
+// Snake Game - Client-side JavaScript
 // Configurações do jogo
 const GRID_SIZE = 20;
-const SNAKE_SPEED = 100;
+const SNAKE_SPEED = 200;
 
 // Estado do jogo
 let snake = [{x: 10, y: 10}, {x: 9, y: 10}];
@@ -19,13 +12,13 @@ let direction = 'RIGHT';
 // Funções do jogo
 function createFood() {
   food = {
-x: Math.floor(Math.random() * GRID_SIZE),
-y: Math.floor(Math.random() * GRID_SIZE)
-};
+    x: Math.floor(Math.random() * GRID_SIZE),
+    y: Math.floor(Math.random() * GRID_SIZE)
+  };
 }
 
 function updateSnake() {
-  // Movimento do dragão
+  // Movimento da snake
   const head = {x: snake[0].x, y: snake[0].y};
   switch(direction) {
     case 'UP': head.y -= 1; break;
@@ -38,11 +31,12 @@ function updateSnake() {
   if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE ||
       snake.some(segment => segment.x === head.x && segment.y === head.y)) {
     gameOver();
+    return;
   }
 
   snake.unshift(head);
 
-  // Comer goma
+  // Comer comida
   if (head.x === food.x && head.y === food.y) {
     score++;
     createFood();
@@ -56,10 +50,9 @@ function gameOver() {
   snake = [{x: 10, y: 10}, {x: 9, y: 10}];
   score = 0;
   direction = 'RIGHT';
-  food = {x: 10, y: 10};
+  food = {x: Math.floor(Math.random() * GRID_SIZE), y: Math.floor(Math.random() * GRID_SIZE)};
 }
 
-// Servidor
-http.createServer(app).listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000');
-});
+// Tornar funções globais para uso no index.html
+window.updateSnake = updateSnake;
+window.SNAKE_SPEED = SNAKE_SPEED;
