@@ -1,17 +1,19 @@
-const express = require("express");
+const express = require('express');
+const path = require('path');
 const app = express();
 
-app.use(express.static("./public"));
+// Servir ficheiros estáticos da pasta public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Rota principal - redireciona para index.html
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+// Página principal
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Para ambiente Vercel - exportar como handler serverless
+// Exportar para Vercel (serverless)
 module.exports = app;
 
-// Para execução local
+// Execução local
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
   const HOST = process.env.HOST || '0.0.0.0';
