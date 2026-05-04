@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <title>Snake Game</title>
+  <style>
+    body {font-family: Arial, sans-serif; text-align:center; background:#000; color:#fff;}
+    #game {display: inline-block; margin-top:20px;}
+    .cell {width:20px; height:20px; float:left;}
+    .snake {background:#6cf;}
+    .food {background:#f36;}
+  </style>
+</head>
+<body>
+  <h1>Jogo da Snake</h1>
+  <div id="game"></div>
+  <p id="score">Pontuação: 0</p>
+
+  <script src="./js/game.js"></script>
+  <script>
+    const gridSize = 20;
+    const gameDiv = document.getElementById('game');
+    const scoreP = document.getElementById('score');
+
+    // Função para desenhar
+    function render() {
+      gameDiv.innerHTML = '';
+      // Desenha os segmentos do snake e a comida
+      for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          const isSnake = snake.some(seg => seg.x === x && seg.y === y);
+          const isFood = (food.x === x && food.y === y);
+          if (isSnake) cell.classList.add('snake');
+          if (isFood) cell.classList.add('food');
+          gameDiv.appendChild(cell);
+        }
+      }
+      scoreP.textContent = 'Pontuação: ' + score;
+    }
+
+    // Controle de teclado
+    document.addEventListener('keydown', e => {
+      const key = e.key;
+      if (key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+      if (key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+      if (key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+      if (key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+    });
+
+    // Loop de atualização
+    setInterval(() => {
+      updateSnake();
+      render();
+    }, SNAKE_SPEED);
+
+    render();
+  </script>
+</body>
+</html>
